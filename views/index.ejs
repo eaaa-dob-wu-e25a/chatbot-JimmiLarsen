@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Client Server - EJS</title>
+  </head>
+  <body>
+    <form method="POST" action="/submit">
+      <input type="text" name="name" placeholder="Please enter your name" />
+      <button type="submit">Send</button>
+    </form>
+
+        <% if (name) { %>
+        <h1>Hello <%= name %> 👋</h1>
+        <% } %>
+
+        <% if (error) { %>
+        <p style="color: red;"><%= error %></p>
+        <% } %>
+
+  </body>
+</html>
