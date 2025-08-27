@@ -2,20 +2,35 @@
 <html>
   <head>
     <title>Client Server - EJS</title>
+    <link rel="stylesheet" href="/css/styles.css">
   </head>
-  <body>
-    <form method="POST" action="/submit">
-      <input type="text" name="name" placeholder="Please enter your name" />
-      <button type="submit">Send</button>
-    </form>
 
-        <% if (name) { %>
+  <body>
+    <div class="chat-messages">
+      
+      <% messages.forEach(msg => { %>
+        
+        <div class="message <%= msg.sender.toLowerCase() %>">
+          
+          <strong><%= msg.sender %>:</strong> <%= msg.text %>
+        </div>
+        
+        <% }) %>
+      </div>
+      
+      <form method="POST" action="/chat">
+        <input type="text" name="name" placeholder="Please enter your name" />
+        <input type="text" name="message" placeholder="Write a message" />
+        <button type="submit">Send</button>
+      </form>
+
+      
+      <% if (name) { %>
         <h1>Hello <%= name %> 👋</h1>
         <% } %>
 
         <% if (error) { %>
-        <p style="color: red;"><%= error %></p>
-        <% } %>
-
-  </body>
-</html>
+          <p style="color: red;"><%= error %></p>
+          <% } %>
+        </body>
+        </html>
