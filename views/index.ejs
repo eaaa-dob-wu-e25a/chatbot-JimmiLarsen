@@ -2,35 +2,37 @@
 <html>
   <head>
     <title>Client Server - EJS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
   </head>
 
   <body>
-    <div class="chat-messages">
-      
-      <% messages.forEach(msg => { %>
-        
-        <div class="message <%= msg.sender.toLowerCase() %>">
-          
-          <strong><%= msg.sender %>:</strong> <%= msg.text %>
-        </div>
-        
-        <% }) %>
-      </div>
-      
-      <form method="POST" action="/chat">
-        <input type="text" name="name" placeholder="Please enter your name" />
-        <input type="text" name="message" placeholder="Write a message" />
-        <button type="submit">Send</button>
-      </form>
-
-      
-      <% if (name) { %>
-        <h1>Hello <%= name %> 👋</h1>
-        <% } %>
-
-        <% if (error) { %>
-          <p style="color: red;"><%= error %></p>
-          <% } %>
-        </body>
-        </html>
+    <main>
+      <article>
+        <section>
+          <h1>Hello how can I help?</h1>
+          <p>Dette er Jimmis ChatBot som er klar til at hjælpe dig</p>
+        </section>
+        <section class="chat-messages">
+          <% messages.forEach(msg => { %>
+            <div class="message <%= msg.sender.toLowerCase() %>">
+              <strong><%= msg.sender %>:</strong> <%= msg.text %>
+            </div>
+            <% }) %>
+          </div>
+        </section>
+        <section>
+          <form method="POST" action="/chat">
+            <input type="text" name="message" placeholder="Write a message" />
+            <button type="submit">Send</button>
+          </form>
+          <% if (error) { %>
+            <p style="color: red;"><%= error %></p>
+            <% } %>
+        </section>
+      </article>
+    </main>
+  </body>
+</html>

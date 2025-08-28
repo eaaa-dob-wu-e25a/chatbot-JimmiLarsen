@@ -2,6 +2,7 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+import responses from "./responses.js";
 
 // Funktion der renser/saniterer input (mod XSS og uønsket HTML)
 function sanitizeInput(input) {
@@ -24,29 +25,6 @@ function sanitizeInputAdvanced(input) {
     .slice(0, 500)            // Begrænser længden til max 500 tegn
     .trim();
 }
-
-// Mulige svar fra botten
-const responses = [
-  {
-    keywords: ["hej", "hello", "hi"],
-    answers: ["Hej med dig!", "Hello there!", "Hej! Hvordan går det?"]
-  },
-  {
-    keywords: ["hvordan går det", "hvordan har du det"],
-    answers: ["Jeg har det fint, tak!", "Det går godt med mig!"]
-  },
-  {
-    keywords: ["farvel", "bye", "ses"],
-    answers: ["Farvel!", "Vi ses!", "Tak for snakken!"]
-  },
-  {
-    keywords: ["hjælp", "help"],
-    answers: [
-      "Jeg kan hjælpe dig med at chatte!",
-      "Spørg mig om hvad som helst!"
-    ]
-  }
-];
 
 // Laver __dirname og __filename (da de ikke findes i ES modules som standard)
 const __filename = fileURLToPath(import.meta.url);
@@ -117,12 +95,12 @@ app.post("/chat", (req, res) => {
 
     // Hvis ingen match findes, giv et fallback-svar
     if (!foundResponse) {
-      botReply = `Du skrev: "${userMessage}". Prøv at skrive "hej" eller "hjælp"!`;
+      botReply = `Du skrev: "${userMessage}".`;
     }
 
     // Gem kun beskederne hvis der ikke er fejl
     if (!error) {
-      messages.push({ sender: userName || "Bruger", text: userMessage }); // Brugerens besked
+      messages.push({ sender: userName || "Kunde", text: userMessage }); // Brugerens besked
       messages.push({ sender: "Bot", text: botReply });                   // Bot'ens svar
     }
   }
