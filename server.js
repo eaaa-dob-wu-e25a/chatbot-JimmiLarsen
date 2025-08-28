@@ -100,8 +100,8 @@ app.post("/chat", (req, res) => {
 
     // Gem kun beskederne hvis der ikke er fejl
     if (!error) {
-      messages.push({ sender: userName || "Kunde", text: userMessage }); // Brugerens besked
-      messages.push({ sender: "Bot", text: botReply });                   // Bot'ens svar
+      messages.push({ sender: userName || "User", text: userMessage }); // Brugerens besked
+      messages.push({ sender: "NPC", text: botReply });                   // Bot'ens svar
     }
   }
 
