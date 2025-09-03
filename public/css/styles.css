@@ -17,15 +17,10 @@ h1, h2, p {
 
 h1 {
   font-size: 31px;
-  padding-bottom: 5px;
 }
 
 p {
   font-size: 18px;
-}
-
-section {
-  margin: 10px 0px 10px 0px;
 }
 
 /* width */
@@ -53,7 +48,7 @@ section {
   max-height: 400px;
   overflow-y: auto;
   border: 3px solid #FFD700;
-  padding: 10px 5% 0px 5%;
+  padding: 0px 5% 0px 5%;
   border-radius: 15px;
 }
 
@@ -63,13 +58,13 @@ section {
 }
 
 /* Brugerens beskeder */
-.message.user {
+.message.kunde {
   text-align: center;
   background-color: #010203;
   color: #f5f5f5;
 }
 /* Bottens modsvar */
-.message.npc {
+.message.bot {
   text-align: center;
   background-color: #FFD700;
   color: #010203;
