@@ -64,6 +64,8 @@ app.post("/chat", (req, res) => {
   let botReply = ""; // Her gemmes botten's svar
   let error = "";    // Her gemmes evt. fejlbesked (fx hvis feltet er tomt)
 
+  res.redirect("/");
+
   // Valider brugerens besked
   if (!userMessage || userMessage.trim() === "") {
     error = "Du skal skrive en besked!";
