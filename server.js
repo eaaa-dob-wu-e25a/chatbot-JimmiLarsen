@@ -1,121 +1,99 @@
-// Importerer nødvendige moduler
+// Dette er serverens hovedfil, der sætter en simpel Express-server op
+// til at håndtere chatbeskeder via et REST API.
+
+
+// her importerer vi nødvendige moduler
+
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import responses from "./responses.js";
 
-// Funktion der renser/saniterer input (mod XSS og uønsket HTML)
-function sanitizeInput(input) {
-  if (typeof input !== "string") return "";
+// her definerer vi nogle konstanter til at hjælpe med filstier
+// __filename og __dirname er ikke tilgængelige i ES-moduler som standard,
+// så vi bruger fileURLToPath og path.dirname til at oprette dem
 
-  return input
-    .replace(/[<>]/g, "")       // Fjerner < og > (så ingen HTML-tags kan bruges)
-    .replace(/javascript:/gi, "") // Fjerner javascript: i links
-    .replace(/on\w+=/gi, "")      // Fjerner event handlers (fx onclick=)
-    .trim();                      // Fjerner mellemrum i starten/slutningen
-}
-
-// Alternativ strengere sanitization-funktion
-function sanitizeInputAdvanced(input) {
-  if (typeof input !== "string") return "";
-
-  return input
-    .replace(/[<>'"]/g, "")   // Fjerner tegn < > ' "
-    .replace(/script/gi, "")  // Fjerner ordet "script"
-    .slice(0, 500)            // Begrænser længden til max 500 tegn
-    .trim();
-}
-
-// Laver __dirname og __filename (da de ikke findes i ES modules som standard)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Opretter Express app
-const app = express();
+// her opretter vi en Express-applikation og en tom array til at gemme beskeder
+// app er vores Express applikation
+// messages er en array der holder alle chatbeskeder
 
-// Array til at gemme alle beskeder under sessionen
+const app = express();
 const messages = [];
 
-// Fortæller Express at vi bruger EJS som view engine
-app.set("view engine", "ejs");
+// Middleware til logging af alle indkommende requests
+// Dette middleware logger hver request med metode og URL
 
-// Gør "public"-mappen tilgængelig for statiske filer (fx CSS og billeder)
-// Eksempel: /public/css/styles.css kan hentes i browseren som /css/styles.css
+// toISOString() er en metode der konverterer datoen til en standardiseret streng
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
+// Body parsers (urlencoded til form submissions, json hvis du vil bruge JSON senere)
+// express.urlencoded og express.json er middleware der parser indkommende request bodies
+// så vi kan tilgå dataen via req.body
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Serve static files fra /public
 app.use(express.static(path.join(__dirname, "public")));
 
-// Middleware til at læse POST-data fra formularer (req.body)
-app.use(express.urlencoded({ extended: true }));
+// Her henter vi beskederne skrevet i chatten
+// og sender dem som JSON til klienten
 
-// ROUTE: Forsiden (GET)
-// Når brugeren går til "/" vises index.ejs
-app.get("/", (req, res) => {
-  res.render("index", { messages, botReply: "", name: "", error: null });
+app.get("/api/messages", (req, res) => {
+  return res.json({ messages });
 });
 
-// ROUTE: Chat (POST)
-// Når brugeren sender en formular, fanges beskeden her
-app.post("/chat", (req, res) => {
-  const userName = req.body.name;      // Navn fra inputfeltet
-  let userMessage = req.body.message;  // Beskeden fra inputfeltet
+// Her håndterer vi nye beskeder sendt fra klienten
+// Vi validerer beskeden og genererer et svar baseret på nøgleord
 
-  // Sanitér beskeden for at undgå skadeligt indhold
-  userMessage = sanitizeInput(userMessage);
+// Et nøgleord er et ord eller en sætning der udløser et bestemt svar fra botten
 
-  let botReply = ""; // Her gemmes botten's svar
-  let error = "";    // Her gemmes evt. fejlbesked (fx hvis feltet er tomt)
+app.post("/api/messages", (req, res) => {
+  const userName = req.body.name || "Kunde";
+  const userMessage = typeof req.body.message === "string" ? req.body.message.replace(/[<>]/g, "").trim() : "";
 
-  res.redirect("/");
+  let botReply = "";
+  let error = null;
 
-  // Valider brugerens besked
-  if (!userMessage || userMessage.trim() === "") {
+// Her tjekker vi om beskeden er tom, for kort eller for lang
+// Hvis beskeden er gyldig, søger vi efter nøgleord i responses.js
+// og vælger et tilfældigt svar fra de matchende svarmuligheder
+
+  if (!userMessage) {
     error = "Du skal skrive en besked!";
-    botReply = "Skriv en besked for at chatte!";
+    botReply = error;
   } else if (userMessage.length < 2) {
-    error = "Beskeden skal være mindst 2 tegn lang!";
-    botReply = "Din besked er for kort. Prøv igen!";
+    error = "Beskeden er for kort.";
+    botReply = error;
   } else if (userMessage.length > 500) {
-    error = "Beskeden er for lang (max 500 tegn)!";
-    botReply = "Din besked er for lang. Prøv at gøre den kortere!";
+    error = "Beskeden er for lang.";
+    botReply = error;
   } else {
-    // Konverter beskeden til små bogstaver for lettere matching
     const lowerMessage = userMessage.toLowerCase();
-    let foundResponse = false;
-
-    // Loop gennem bot-svarene og find en der matcher
-    for (let response of responses) {
-      for (let keyword of response.keywords) {
-        if (lowerMessage.includes(keyword)) {
-          // Vælg et tilfældigt svar fra listen
-          const randomIndex = Math.floor(Math.random() * response.answers.length);
-          botReply = response.answers[randomIndex];
-          foundResponse = true;
-          break;
-        }
+    let found = false;
+    for (const r of responses) {
+      if (r.keywords.some(k => lowerMessage.includes(k))) {
+        botReply = r.answers[Math.floor(Math.random() * r.answers.length)];
+        found = true;
+        break;
       }
-      if (foundResponse) break;
     }
 
-    // Hvis ingen match findes, giv et fallback-svar
-    if (!foundResponse) {
-      botReply = `Du skrev: "${userMessage}".`;
-    }
+// Hvis ingen nøgleord blev fundet, bruger vi et standard svar
+// Det er også her vi navngiver botten "NPC"
 
-    // Gem kun beskederne hvis der ikke er fejl
-    if (!error) {
-      messages.push({ sender: userName || "User", text: userMessage }); // Brugerens besked
-      messages.push({ sender: "NPC", text: botReply });                   // Bot'ens svar
-    }
+    if (!found) botReply = `Du skrev: "${userMessage}".`;
+    messages.push({ sender: userName, text: userMessage });
+    messages.push({ sender: "NPC", text: botReply });
   }
 
-  // Send data til EJS-skabelonen
-  // -> messages = alle beskeder i chatten
-  // -> botReply = seneste svar fra botten
-  // -> error    = fejlbesked (hvis nogen)
-  // -> name     = brugernavn (fra formen)
-  res.render("index", { messages, botReply, error, name: userName });
+  return res.json({ messages, error });
 });
 
-// Starter serveren på port 3000
-app.listen(3000, () =>
-  console.log("🚀 Server running at http://localhost:3000")
-);
+app.listen(3000, () => console.log("🚀 Server running at http://localhost:3000"));

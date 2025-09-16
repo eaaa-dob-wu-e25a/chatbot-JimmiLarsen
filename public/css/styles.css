@@ -1,101 +1,149 @@
 * {
-  margin: 0%;
-  padding: 0%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
 }
 
-body {
-  background-color: #010203;
-  font-family: "Roboto", sans-serif;
-  display: flex;
-  justify-content: center;
-  align-content: center;
+  body {
+    background-color: #f4f4f4;
+    background-image: url('/img/background.jpg'); /* Tilføj denne linje */
+    background-size: cover;                      /* Sørger for at billedet dækker hele baggrunden */
+    background-position: center;                 /* Centrerer billedet */
+    background-repeat: no-repeat;                /* Undgår gentagelse */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  #chat {
+    list-style-type: none;
+    width: 100%;
+    height: 400px;
+    overflow-y: auto;
+    border: 2px solid #FFD700;      /* Gul kant */
+    border-radius: 16px;            /* Matcher containerens radius */
+    padding: 10px;
+    background-color: transparent;  /* Gør chatrummet transparent */
+    margin-bottom: 20px;
+    color: #fff;                    /* Gør teksten hvid */
+  }
+
+  #chat li {
+    margin-bottom: 10px;
+  }
+  #chat li b {
+    /* Standard: blå til bot */
+    color: #007BFF;
+  }
+
+  /* Kunde-navn gul, bot-navn blå */
+  #chat li b.kunde {
+    color: #FFD700;
+  }
+  #chat li b.bot {
+    color: #007BFF;
+  }
+  form {
+    display: flex;
+    width: 100%;
+  }
+  .input-wrapper {
+  position: relative;
+  flex: 1;
 }
 
-h1, h2, p {
-  color: #f5f5f5;
+.input-wrapper input[type="text"] {
+  width: 100%;
+  padding: 16px 10px 10px 10px;
+  border: 1px solid #FFD700;
+  border-radius: 4px 0 0 4px;
+  font-size: 16px;
+  background: transparent;
+  color: #fff;
+  outline: none; /* Fjerner blå markør */
+  box-shadow: none; /* Fjerner evt. ekstra marker */
 }
 
-h1 {
-  font-size: 31px;
-  padding-bottom: 5px;
+.input-wrapper label {
+  position: absolute;
+  left: 12px;
+  top: 16px;
+  color: #fff;
+  pointer-events: none;
+  background: transparent;
+  transition: 0.2s ease all;
+  font-size: 16px;
+  padding: 0 4px;
 }
 
-p {
-  font-size: 18px;
+/* Når input er aktivt eller har tekst, flyt label op */
+.input-wrapper input:focus + label,
+.input-wrapper input:not(:placeholder-shown):not(:focus):valid + label {
+  top: -10px;
+  left: 8px;
+  font-size: 13px;
+  color: #FFD700;
+  background: rgba(0,0,0,0.7);
 }
 
-section {
-  margin: 10px 0px 10px 0px;
+/* Fjerner blå kant på knap ved klik */
+button:focus {
+  outline: none;
+  box-shadow: none;
 }
 
-/* width */
-::-webkit-scrollbar {
-  width: 20px;
+  button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #FFD700;     /* Gul baggrund */
+    color: #333;                   /* Mørk tekst for kontrast */
+    font-size: 16px;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+  }
+  button:hover {
+    background-color: #FFC300;     /* Lidt mørkere gul ved hover */
+  }
+
+  .chat-container {
+    background: rgba(0, 0, 0, 0.7); /* Sort med 70% gennemsigtighed */
+    border-radius: 16px;
+    padding: 32px 24px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    max-width: 900px; /* Øget bredde */
+    width: 100%;
+    margin: 0 auto 24px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #chat, form {
+    max-width: 850px; /* Øget bredde, lidt mindre end container */
+    width: 100%;
+  }
+
+  h1, .chat-container p {
+  color: #FFD700;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  border: #FFD700;
-  border-radius: 10px;
+.chat-container p {
+  margin-bottom: 24px;
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: orange;
-  border-radius: 15px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: orangered;
-}
-
-.chat-messages {
-  max-height: 400px;
-  overflow-y: auto;
-  border: 3px solid #FFD700;
-  padding: 10px 5% 0px 5%;
-  border-radius: 15px;
-}
-
-.message {
-  margin-bottom: 10px;
-  padding: 5px;
-}
-
-/* Brugerens beskeder */
-.message.user {
-  text-align: center;
-  background-color: #010203;
-  color: #f5f5f5;
-}
-/* Bottens modsvar */
-.message.npc {
-  text-align: center;
-  background-color: #FFD700;
-  color: #010203;
-  border-radius: 15px;
-  padding: 10px 25px 10px 25px;
-}
-
-button {
-  color: #010203;
-  background-color: #FFD700;
-  border-radius: 15px;
-  padding: 7px 10px 7px 10px;
-  font-size: 21px;
-}
-button:hover {
-  background-color: orange;
-}
-
-input {
-  background-color:#010203;
-  color:#f5f5f5;
-  border-color: #FFD700;
-  border-radius: 15px;
-  padding: 7px 10px 7px 10px;
-  font-size: 21px;
-}
-input::placeholder {
-  color: #f5f5f5;
-}
+/* Responsive Design */
+  @media (max-width: 600px) {
+    #chat, form {
+      max-width: 100%;
+    }
+  }

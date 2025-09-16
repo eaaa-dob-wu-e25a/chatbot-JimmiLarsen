@@ -1,24 +1,25 @@
 // Mulige svar fra botten
 const responses = [
   {
-    keywords: ["hej", "hello", "hi"],
-    answers: ["Hej med dig!", "Hello there!", "Hej! Hvordan går det?"]
+    keywords: ["hej", "goddag",
+      "hey", "greetings", "yo",
+      "morn", "godmorgen", "godaften",
+      "godnat", "halløj", "hallo",
+      "hejsa", "hey"],
+
+    answers: ["Hej hvad kan jeg hjælpe dig med i dag!",
+      "Goddag! Hvordan kan jeg hjælpe?",
+      "Hey! Hvad vil du gerne vide?",
+      "Halløj! Hvad kan jeg gøre for dig?"],
   },
   {
-    keywords: ["hvordan går det", "hvordan har du det"],
-    answers: ["Jeg har det fint, tak!", "Det går godt med mig!"]
+    keywords: ["Kan du hjælpe mig", "Hjælp mig", "Hjælp"],
+    answers: ["Du kan åbne listen over alt jeg kan hjælpe med ved at skrive hjælp"],
   },
   {
-    keywords: ["farvel", "bye", "ses"],
+    keywords: ["Tak for", "Kan du have",],
     answers: ["Farvel!", "Vi ses!", "Tak for snakken!"]
   },
-  {
-    keywords: ["hjælp", "help"],
-    answers: [
-      "Jeg kan hjælpe dig med at chatte!",
-      "Spørg mig om hvad som helst!"
-    ]
-  }
 ];
 
 export default responses;
