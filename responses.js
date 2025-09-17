@@ -13,11 +13,11 @@ const responses = [
       "Halløj! Hvad kan jeg gøre for dig?"],
   },
   {
-    keywords: ["Kan du hjælpe mig", "Hjælp mig", "Hjælp"],
+    keywords: ["kan du hjælpe mig", "hjælp mig", "hjælp"],
     answers: ["Du kan åbne listen over alt jeg kan hjælpe med ved at skrive hjælp"],
   },
   {
-    keywords: ["Tak for", "Kan du have",],
+    keywords: ["tak for hjælpen", "kan du have en god dag"],
     answers: ["Farvel!", "Vi ses!", "Tak for snakken!"]
   },
 ];
