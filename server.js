@@ -46,6 +46,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // og sender dem som JSON til klienten
 
 app.get("/api/messages", (req, res) => {
+  res.set("Cache-Control", "public, max-age=3600");
   return res.json({ messages });
 });
 

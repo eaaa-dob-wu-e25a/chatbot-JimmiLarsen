@@ -25,7 +25,7 @@ async function loadMessages() {
   ).join("");
 }
 
-// Her starter vi med at lytte efter formularens submit-begivenhed
+// Her starter vi med at lytte efter formularens submit-event
 // og håndterer den asynkront
 
 //vi bruger getElementById til at finde formularen med id "chatForm"
