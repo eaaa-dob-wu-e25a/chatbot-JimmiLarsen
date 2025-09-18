@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Client Server - EJS</title>
-  </head>
-  <body>
-    <form method="POST" action="/submit">
-      <input type="text" name="name" placeholder="Please enter your name" />
-      <button type="submit">Send</button>
-    </form>
 
-        <% if (name) { %>
-        <h1>Hello <%= name %> 👋</h1>
-        <% } %>
+<head>
+  <title>NPC - DesignbyJimmis Chatbot</title>
+</head>
 
-        <% if (error) { %>
-        <p style="color: red;"><%= error %></p>
-        <% } %>
+<body>
+  <h2>Welcome to DesignbyJimmis Chatbot</h2>
+  <p>My name is NPC</p>
 
-  </body>
+  <!-- Denne del af koden gør det muligt at sende beskeder -->
+  <form method="POST" action="/chat">
+    <input type="text" name="message" placeholder="Skriv din besked her" required />
+    <button type="submit">Send</button>
+  </form>
+
+  <!-- Denne del af koden gør det muligt at vise chat historik -->
+  <h3>Chat History:</h3>
+<ul>
+  <% messages.forEach(function(messege) { %>
+    <li><strong>Bruger:</strong> <%= messege.user %> <br>
+        <strong>Bot:</strong> <%= messege.bot %>
+    </li>
+  <% }); %>
+</ul>
+</body>
+
 </html>

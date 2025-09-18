@@ -1,22 +1,35 @@
+//Server.js - Express server setup with EJS templating
 import express from "express";
-// Import express frameworkconst app = express();
-// Create an instance of express// Listen on port 3000
+//import response from "response.js";
 
+// Here the port is defined
+const PORT = 3000;
+
+// Express app setup
 const app = express();
-app.set("view engine", "ejs");
+app.set("view engine", "ejs",);
 app.use(express.urlencoded({ extended: true }));
+
+app.post("/chat", (req, res) => {
+  const userMessage = req.body.message;
+  const botResponse = response(userMessage);
+  messages.push({ user: userMessage, bot: botResponse });
+  res.redirect("/");
+});
 app.get("/", (req, res) => {
-  res.render("index", { name: "", error: "" });
+  res.render("index", { messages });
 });
 
-// POST - handle form submission
-app.post("/submit", (req, res) => {
-  const name = req.body.name;
-  let error = "";
-  if (!name || name.trim() === "") {
-    error = "Du skal indtaste et navn!";
+const messages = [];
+const response = (message) => {
+  // Simple keyword-based responses
+  if (message.includes("hello")) {
+    return "Hello! How can I assist you today?";
   }
-  res.render("index", { name, error });
-});
+  return "I'm sorry, I didn't understand that.";
+};
 
-app.listen(3000, () => console.log("Server running at http://localhost:3000"));
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
