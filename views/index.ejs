@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>NPC - DesignbyJimmis Chatbot</title>
+</head>
+
+<body>
+  <h2>Welcome to DesignbyJimmis Chatbot</h2>
+  <p>My name is NPC</p>
+
+  <!-- Denne del af koden gør det muligt at sende beskeder -->
+  <form method="POST" action="/chat">
+    <input type="text" name="message" placeholder="Skriv din besked her" required />
+    <button type="submit">Send</button>
+  </form>
+
+  <!-- Denne del af koden gør det muligt at vise chat historik -->
+  <h3>Chat History:</h3>
+<ul>
+  <% messages.forEach(function(messege) { %>
+    <li><strong>Bruger:</strong> <%= messege.user %> <br>
+        <strong>Bot:</strong> <%= messege.bot %>
+    </li>
+  <% }); %>
+</ul>
+</body>
+
+</html>
